@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "41428151432",
+    "project_id": "chatapp-32d3f",
+    "storage_bucket": "chatapp-32d3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41428151432:android:c8a1f75e7f1fd162b0833d",
+        "android_client_info": {
+          "package_name": "com.hediyeyildirim.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41428151432-nt3b31g2nb5cpv61fs1kcgbal1l376fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUguqz1dv0ZtTd1nGp6SX4RdVb95MYxiw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41428151432-nt3b31g2nb5cpv61fs1kcgbal1l376fa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
