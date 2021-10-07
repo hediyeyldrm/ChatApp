@@ -3,6 +3,7 @@ package com.hediyeyildirim.chatapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +33,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null){
+            Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+            startActivity(intent);
+        }
+
 
 
     }
@@ -45,11 +53,15 @@ public class SignUpActivity extends AppCompatActivity {
 
                        if (task.isSuccessful()){
 
-                           FirebaseUser user = mAuth.getCurrentUser();
-                           String userEmail = user.getEmail().toString();
-                           System.out.println("user e-mail" + userEmail);
+                           //FirebaseUser user = mAuth.getCurrentUser();
+                           //String userEmail = user.getEmail().toString();
+                           //System.out.println("user e-mail" + userEmail);
 
                            //intent
+                           Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                           startActivity(intent);
+
+
 
                        } else {
 
@@ -63,6 +75,24 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
      public void signIn(View view){
+
+        mAuth.signInWithEmailAndPassword(emailText.getText().toString(),passwordText.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (task.isSuccessful()){
+
+                            Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                            startActivity(intent);
+
+                        } else{
+                            Toast.makeText(SignUpActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
 
      }
 
