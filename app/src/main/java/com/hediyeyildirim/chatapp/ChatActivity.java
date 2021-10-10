@@ -2,6 +2,7 @@ package com.hediyeyildirim.chatapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +10,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ChatActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    RecyclerView recyclerView;
+    EditText messageText;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,6 +52,10 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        messageText =findViewById(R.id.chat_activity_message_text);
+        recyclerView =findViewById(R.id.recycler_view);
+
 
         mAuth = FirebaseAuth.getInstance();
 
