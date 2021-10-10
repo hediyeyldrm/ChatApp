@@ -2,6 +2,7 @@ package com.hediyeyildirim.chatapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -14,11 +15,17 @@ import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class ChatActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     RecyclerView recyclerView;
+    RecyclerViewAdapter recyclerViewAdapter;
     EditText messageText;
+
+    private ArrayList<String> chatMessages = new ArrayList<>();
+
 
 
     @Override
@@ -53,8 +60,18 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        chatMessages.add("sss");
+        chatMessages.add("123");
+
         messageText =findViewById(R.id.chat_activity_message_text);
         recyclerView =findViewById(R.id.recycler_view);
+        recyclerViewAdapter = new RecyclerViewAdapter(chatMessages);
+
+
+        RecyclerView.LayoutManager recyclerViewManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(recyclerViewManager);
+
+        recyclerView.setAdapter(recyclerViewAdapter);
 
 
         mAuth = FirebaseAuth.getInstance();
