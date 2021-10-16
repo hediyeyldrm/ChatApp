@@ -12,12 +12,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -86,6 +91,8 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance("https://chatapp-32d3f-default-rtdb.firebaseio.com/");
         databaseReference = database.getReference();
 
+        getData();
+
     }
 
     public void sendMessage(View view){
@@ -98,11 +105,35 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         String userEmail = user.getEmail().toString();
 
+        //databaseReference.child("Chat").child("Chat 1").child("Test Chat").child("Test 1").setValue(messageToSend);
         databaseReference.child("Chats").child(uuidString).child("usermessage").setValue(messageToSend);
         databaseReference.child("Chats").child(uuidString).child("useremail").setValue(userEmail);
 
         messageText.setText("");
-        //databaseReference.child("Chat").child("Chat 1").child("Test Chat").child("Test 1").setValue(messageToSend);
 
+
+        getData();
     }
+
+    public void getData(){
+
+        DatabaseReference newReference = database.getReference("Chats");
+
+        newReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                System.out.println("dataSnapshot Children: " +dataSnapshot.getChildren());
+                System.out.println("dataSnapshot Value: " +dataSnapshot.getValue());
+                System.out.println("dataSnapshot Key: " +dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),databaseError.getMessage().toString(),Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
 }
