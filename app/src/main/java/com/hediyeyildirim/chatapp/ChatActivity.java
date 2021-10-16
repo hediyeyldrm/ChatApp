@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,10 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     EditText messageText;
+
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
+
 
     private ArrayList<String> chatMessages = new ArrayList<>();
 
@@ -60,8 +66,8 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        chatMessages.add("sss");
-        chatMessages.add("123");
+        //chatMessages.add("sss");
+        //chatMessages.add("123");
 
         messageText =findViewById(R.id.chat_activity_message_text);
         recyclerView =findViewById(R.id.recycler_view);
@@ -75,10 +81,16 @@ public class ChatActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance("https://chatapp-32d3f-default-rtdb.firebaseio.com/");
+        databaseReference = database.getReference();
 
     }
 
     public void sendMessage(View view){
+
+        String messageToSend = messageText.getText().toString();
+
+        databaseReference.child("Chat").child("Chat 1").child("Test Chat").child("Test 1").setValue(messageToSend);
 
     }
 }
