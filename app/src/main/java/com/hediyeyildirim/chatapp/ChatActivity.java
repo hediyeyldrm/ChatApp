@@ -14,10 +14,12 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -90,7 +92,17 @@ public class ChatActivity extends AppCompatActivity {
 
         String messageToSend = messageText.getText().toString();
 
-        databaseReference.child("Chat").child("Chat 1").child("Test Chat").child("Test 1").setValue(messageToSend);
+        UUID uuid = UUID.randomUUID(); //uydurma bir dizi-sayı verir.
+        String uuidString = uuid.toString();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userEmail = user.getEmail().toString();
+
+        databaseReference.child("Chats").child(uuidString).child("usermessage").setValue(messageToSend);
+        databaseReference.child("Chats").child(uuidString).child("useremail").setValue(userEmail);
+
+        messageText.setText("");
+        //databaseReference.child("Chat").child("Chat 1").child("Test Chat").child("Test 1").setValue(messageToSend);
 
     }
 }
