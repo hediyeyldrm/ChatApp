@@ -20,6 +20,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.SQLOutput;
@@ -109,18 +111,21 @@ public class ChatActivity extends AppCompatActivity {
         //databaseReference.child("Chat").child("Chat 1").child("Test Chat").child("Test 1").setValue(messageToSend);
         databaseReference.child("Chats").child(uuidString).child("usermessage").setValue(messageToSend);
         databaseReference.child("Chats").child(uuidString).child("useremail").setValue(userEmail);
+        databaseReference.child("Chats").child(uuidString).child("usermessagetime").setValue(ServerValue.TIMESTAMP);
 
         messageText.setText("");
 
-
         getData();
+
     }
 
     public void getData(){
 
         DatabaseReference newReference = database.getReference("Chats");
 
-        newReference.addValueEventListener(new ValueEventListener() {
+        Query query = newReference.orderByChild("usermessagetime");
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -138,7 +143,7 @@ public class ChatActivity extends AppCompatActivity {
                     String useremail = hashMap.get("useremail");
                     String usermessage = hashMap.get("usermessage");
 
-                    chatMessages.add(usermessage);
+                    chatMessages.add(useremail + ": " + usermessage);
 
                     recyclerViewAdapter.notifyDataSetChanged();
                 }
