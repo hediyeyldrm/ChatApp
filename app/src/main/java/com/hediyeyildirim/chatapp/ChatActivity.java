@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class ChatActivity extends AppCompatActivity {
@@ -123,9 +124,27 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                System.out.println("dataSnapshot Children: " +dataSnapshot.getChildren());
-                System.out.println("dataSnapshot Value: " +dataSnapshot.getValue());
-                System.out.println("dataSnapshot Key: " +dataSnapshot.getKey());
+               // System.out.println("dataSnapshot Children: " +dataSnapshot.getChildren());
+               // System.out.println("dataSnapshot Value: " +dataSnapshot.getValue());
+               // System.out.println("dataSnapshot Key: " +dataSnapshot.getKey());
+
+                chatMessages.clear();
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+
+                   // System.out.println("data value: " + ds.getValue());
+
+                    HashMap<String, String> hashMap = (HashMap<String, String>) ds.getValue();
+                    String useremail = hashMap.get("useremail");
+                    String usermessage = hashMap.get("usermessage");
+
+                    chatMessages.add(usermessage);
+
+                    recyclerViewAdapter.notifyDataSetChanged();
+                }
+
+
+
             }
 
             @Override
