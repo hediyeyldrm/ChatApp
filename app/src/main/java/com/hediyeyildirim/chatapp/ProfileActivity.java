@@ -17,13 +17,24 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.IOException;
+import java.util.UUID;
 
 public class ProfileActivity extends AppCompatActivity {
 
     EditText ageText;
     ImageView userImageView;
     Uri selected;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private StorageReference storageReference;
+    private FirebaseAuth mAuth;
 
 
     @Override
@@ -34,9 +45,22 @@ public class ProfileActivity extends AppCompatActivity {
         ageText = findViewById(R.id.ageText);
         userImageView = findViewById(R.id.userImageView);
 
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     public void upload(View view){
+
+        UUID uuidImage = UUID.randomUUID();
+
+        String imageName = "images/"+uuidImage+".jpg";
+
+        StorageReference newReference = storageReference.child(imageName);
+
+
 
     }
 
