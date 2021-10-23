@@ -16,12 +16,16 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -45,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
         ageText = findViewById(R.id.ageText);
         userImageView = findViewById(R.id.userImageView);
 
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance("gs://chatapp-32d3f.appspot.com");
         databaseReference = database.getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -54,17 +58,42 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void upload(View view){
 
-        UUID uuidImage = UUID.randomUUID();
+        final UUID uuidImage = UUID.randomUUID();
 
         String imageName = "images/"+uuidImage+".jpg";
 
         StorageReference newReference = storageReference.child(imageName);
+
+        newReference.putFile(selected).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                StorageReference profileImageRef = FirebaseStorage.getInstance().getReference("images/"+uuidImage+".jpg");
+                profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+
+                        String downloadURL = uri.toString();
+
+                        System.out.println("download URL: "+downloadURL);
+
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
 
 
 
     }
 
     public void selectPicture(View view){
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         } else {
