@@ -1,5 +1,6 @@
 package com.hediyeyildirim.chatapp;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -49,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         ageText = findViewById(R.id.ageText);
         userImageView = findViewById(R.id.userImageView);
 
-        database = FirebaseDatabase.getInstance("gs://chatapp-32d3f.appspot.com");
+        database = FirebaseDatabase.getInstance("https://chatapp-32d3f-default-rtdb.firebaseio.com/");
         databaseReference = database.getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -75,7 +77,24 @@ public class ProfileActivity extends AppCompatActivity {
 
                         String downloadURL = uri.toString();
 
-                        System.out.println("download URL: "+downloadURL);
+                        //System.out.println("download URL: "+downloadURL);
+
+                        UUID uuid = UUID.randomUUID();
+                        String uuidString = uuid.toString();
+
+                        String userAge = ageText.getText().toString();
+
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String useremail = user.getEmail().toString();
+
+                        databaseReference.child("Profiles").child(uuidString).child("userimageurl").setValue(downloadURL);
+                        databaseReference.child("Profiles").child(uuidString).child("userage").setValue(userAge);
+                        databaseReference.child("Profiles").child(uuidString).child("useremail").setValue(useremail);
+
+                        Toast.makeText(getApplicationContext(), "Uploaded!", Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                        startActivity(intent);
 
                     }
                 });
